@@ -31,7 +31,6 @@
 
 /* State to pass around. */
 struct my_objs_s {
-  pthread_t stats_thread_id;
   lbm_context_t *ctx;
   lbm_rcv_t *rcv;
   lbm_src_t *src;
