@@ -283,10 +283,11 @@ int main(int argc, char **argv)
   E(lbm_context_create(&my_objs->ctx1, NULL, NULL, NULL));
   E(lbm_context_create(&my_objs->ctx2, NULL, NULL, NULL));
 
-  /* Run two stats threads out of sync. */
+  /* Stats interval 2 seconds is much too small for most producton
+   * deployments, where 10 minutes or more would typically be used. */
   ENL(stats_thread1 = stats_thread_create(my_objs->ctx1, "ctx1", 2));
   stats_thread_start(stats_thread1);
-  sleep(1);
+  sleep(1);  /* Run the two stats threads out of phase. */
   ENL(stats_thread2 = stats_thread_create(my_objs->ctx2, "ctx2", 2));
   stats_thread_start(stats_thread2);
 

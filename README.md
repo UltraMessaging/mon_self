@@ -10,7 +10,12 @@ Example of application monitoring its own UM stats.
 &bull; [Copyright And License](#copyright-and-license)  
 &bull; [Repository](#repository)  
 &bull; [Introduction](#introduction)  
+&nbsp;&nbsp;&nbsp;&nbsp;&bull; [Quickstart](#quickstart)  
+&nbsp;&nbsp;&nbsp;&nbsp;&bull; [Size of Data Set](#size-of-data-set)  
+&nbsp;&nbsp;&nbsp;&nbsp;&bull; [Architecture](#architecture)  
 &bull; [Coding Notes](#coding-notes)  
+&nbsp;&nbsp;&nbsp;&nbsp;&bull; [C Error Handling](#c-error-handling)  
+&nbsp;&nbsp;&nbsp;&nbsp;&bull; [Delay Before Terminate](#delay-before-terminate)  
 <!-- TOC created by '/home/sford/bin/mdtoc.pl README.md' (see https://github.com/fordsfords/mdtoc) -->
 <!-- mdtoc-end -->
 
@@ -18,7 +23,7 @@ Example of application monitoring its own UM stats.
 
 All of the documentation and software included in this and any
 other Informatica Ultra Messaging GitHub repository
-Copyright (C) Informatica, 2024. All rights reserved.
+(C) Copyright 2023,2024 Informatica Inc. All Rights Reserved.
 
 Permission is granted to licensees to use
 or alter this software for any purpose, including commercial applications,
@@ -55,11 +60,51 @@ Often this form of self-monitoring can leverage the user's existing
 application monitoring infrastructure, making it much easier to implement,
 deploy, and operate with existing systems and staff.
 
+The programs in this repository are not intended to be used as-is.
+They are intended as coding demonstrations;
+possibly a source of cut-and-paste code.
+
+## Quickstart
+
+You can build and run the enclosed programs using the
+"tst.sh" script.
+
+The "mon_self.c" program creates two contexts and a source in each one.
+It creates a receiver in the first context only.
+It runs two separate statistics threads,
+one for each context.
+
+Note that for the purposes of the demonstration,
+statistics are sampled and printed by each thread
+every 2 seconds (the stats interval).
+In a large production deployment,
+this would produce an unreasonable amount of statistical data.
+A stats interval of 10 minutes or more is much more common.
+
+## Size of Data Set
+
 One goal of this repository is to demonstrate a "minimal" set of statistics.
+I.e. only a subset of all statistics are printed.
+Informatica suggests that you not reduce the included set further.
+For example, some customers will determine that some of their subscribers
+are joined to many hundreds of transport sessions,
+resulting in many hundreds of statistics records printed with each sample.
+It may be tempting to aggregate the transport sessions and produce a single
+summary line.
+This would be useful for detecting a problem,
+but may not be sufficient to diagnose and treat the problem.
+If the volume of data generated per hour is too large,
+Informatica recommends decreasing the frequency of sampling
+rather than decreasing the amount of data per sample.
+
+## Architecture
 
 A separate thread is created to sample stats and print them to STDOUT.
-
-
+This is preferred over the method used by the UM example applications
+which frequently use a UM timer to trigger sampling and printing of statistics.
+The problem with using a UM timer is that it can interfere with the
+reception of time-critical messages,
+introducing undesired latency outliers and jitter.
 
 # Coding Notes
 
