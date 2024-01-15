@@ -43,13 +43,51 @@ See https://github.com/UltraMessaging/mon_self for code and documentation.
 
 # Introduction
 
+Informatica recommends that customers implement a centralized monitoring
+collector to record UM statistics from all UM components (publishers,
+subscribers, and infrastructure components like Stores and DRO).
+However, we understand that implementing a new monitoring infrastructure
+is time-consuming and can be difficult for customers to prioritize.
+
+This repository demonstrates a method whereby applications can be modified
+to monitor themselves, without the need for a centralized infrastructure.
+Often this form of self-monitoring can leverage the user's existing
+application monitoring infrastructure, making it much easier to implement,
+deploy, and operate with existing systems and staff.
+
+One goal of this repository is to demonstrate a "minimal" set of statistics.
+
+A separate thread is created to sample stats and print them to STDOUT.
+
+
+
 # Coding Notes
 
+## C Error Handling
+
+A very simple error handling convention is used so as not to obscure the
+algorithms being demonstrated.
+A set of three code macros is used to wrap function calls:
+<ul>
+<li>E - For UM API calls.
+<li>ENZ - For non-UM functions that return non-zero for error with
+"errno" holding extended error information.
+<li>ENL - For non-UM functions that return NULL for error with
+"errno" holding extended error information.
+</ul>
+These macros write error information to STDERR and exit the program
+with a non-zero status.
+
+## Delay Before Terminate
+
 The stats thread's main loop checks the "running" flag and has a 1-second sleep.
-When main() wants to shut down, it clears the "running" flag and joins the
+Whuen main() wants to shut down, it clears the "running" flag and joins the
 stats thread.
 Main will have to wait up to 1 full second for the stats thread to exit.
 
-This could be made event-driven using a semaphore with a timed wait,
-or with a condition variable with a timed wait,
-or with a pipe select.
+This could be made event-driven using:
+<ul>
+<li>A semaphore with a timed wait,
+<li>A condition variable with a timed wait,
+<li>A pipe with select/epoll with a timeout.
+</ul>

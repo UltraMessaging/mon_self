@@ -57,7 +57,7 @@ struct stats_thread_s {
 typedef struct stats_thread_s stats_thread_t;
 
 
-/* Simple error handler. */
+/* Simple error handler for LBM. */
 #define E(e_lbm_funct_call_) do { \
   int e_ = (e_lbm_funct_call_); \
   if (e_ == LBM_FAILURE) { \
