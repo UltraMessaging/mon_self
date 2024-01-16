@@ -67,13 +67,9 @@ possibly a source of cut-and-paste code.
 
 ## Quickstart
 
-You can build and run the enclosed programs using the
-"tst.sh" script.
-
-The "mon_self.c" program creates two contexts and a source in each one.
-It creates a receiver in the first context only.
-It runs two separate statistics threads,
-one for each context.
+You can build and run the enclosed programs using the "tst.sh" script.
+It runs the C and Java tests five times,
+each time with a different transport type (LBT-RM, LBT-RU, TCP, IPC, SMX).
 
 Note that for the purposes of the demonstration,
 statistics are sampled and printed by each thread
@@ -100,11 +96,10 @@ rather than decreasing the amount of data per sample.
 
 A few customers have an existing application monitoring infrastructure
 that cannot easily handle multiple per-transport-session records.
-These customers aggregated all receiver transport stats into a single
-receiver record and included that in their monitoring infrastructure.
-However, they wrote the individual transport session records to a
-local disk file to make the detailed information available,
-albeit somewhat less conveniently.
+These customers aggregate all transport stats into a single
+record and include that in their monitoring infrastructure.
+However, they also write the individual transport session records to
+a local disk file to make the detailed information available.
 
 One exception to the "no aggregation" guideline are
 the "drop" counters due to malformed packets.
@@ -116,7 +111,16 @@ misconfigured application is sending unrecognized packets to UM.
 
 ## Architecture
 
-A separate thread is created to sample stats and print them to STDOUT.
+The "mon_self.c" program creates two contexts and a source in each one.
+It creates a receiver in the first context only.
+It runs two separate statistics threads,
+one for each context.
+This "two context" design is intended only to demonstrate two sources
+for the same topic.
+It is rare for real applications to create more than one context.
+
+To do the monitoring, the main application creates a "stats thread" object.
+This separate thread is created to sample stats and print them to STDOUT.
 This is preferred over the method used by the UM example applications
 which frequently use a UM timer to trigger sampling and printing of statistics.
 The problem with using a UM timer is that it can interfere with the
@@ -167,22 +171,20 @@ You need to use the C documentation for that.
 Here are appropriate links:
 
 Source transport statistics:
-<ul>
-<li>[TRANSPORT_STAT_LBTRM](https://ultramessaging.github.io/currdoc/doc/API/structlbm__src__transport__stats__lbtrm__t__stct.html)
-<li>[TRANSPORT_STAT_LBTRU](https://ultramessaging.github.io/currdoc/doc/API/structlbm__src__transport__stats__lbtru__t__stct.html)
-<li>[TRANSPORT_STAT_TCP](https://ultramessaging.github.io/currdoc/doc/API/structlbm__src__transport__stats__tcp__t__stct.html)
-<li>[TRANSPORT_STAT_LBTIPC](https://ultramessaging.github.io/currdoc/doc/API/structlbm__src__transport__stats__lbtipc__t__stct.html)
-<li>[TRANSPORT_STAT_LBTSMX](https://ultramessaging.github.io/currdoc/doc/API/structlbm__src__transport__stats__lbtsmx__t__stct.html)
-</ul>
+
+* [TRANSPORT_STAT_LBTRM](https://ultramessaging.github.io/currdoc/doc/API/structlbm__src__transport__stats__lbtrm__t__stct.html)
+* [TRANSPORT_STAT_LBTRU](https://ultramessaging.github.io/currdoc/doc/API/structlbm__src__transport__stats__lbtru__t__stct.html)
+* [TRANSPORT_STAT_TCP](https://ultramessaging.github.io/currdoc/doc/API/structlbm__src__transport__stats__tcp__t__stct.html)
+* [TRANSPORT_STAT_LBTIPC](https://ultramessaging.github.io/currdoc/doc/API/structlbm__src__transport__stats__lbtipc__t__stct.html)
+* [TRANSPORT_STAT_LBTSMX](https://ultramessaging.github.io/currdoc/doc/API/structlbm__src__transport__stats__lbtsmx__t__stct.html)
 
 Receiver transport statistics:
-<ul>
-<li>[TRANSPORT_STAT_LBTRM](https://ultramessaging.github.io/currdoc/doc/API/structlbm__rcv__transport__stats__lbtrm__t__stct.html)
-<li>[TRANSPORT_STAT_LBTRU](https://ultramessaging.github.io/currdoc/doc/API/structlbm__rcv__transport__stats__lbtru__t__stct.html)
-<li>[TRANSPORT_STAT_TCP](https://ultramessaging.github.io/currdoc/doc/API/structlbm__rcv__transport__stats__tcp__t__stct.html)
-<li>[TRANSPORT_STAT_LBTIPC](https://ultramessaging.github.io/currdoc/doc/API/structlbm__rcv__transport__stats__lbtipc__t__stct.html)
-<li>[TRANSPORT_STAT_LBTSMX](https://ultramessaging.github.io/currdoc/doc/API/structlbm__rcv__transport__stats__lbtsmx__t__stct.html)
-</ul>
+
+* [TRANSPORT_STAT_LBTRM](https://ultramessaging.github.io/currdoc/doc/API/structlbm__rcv__transport__stats__lbtrm__t__stct.html)
+* [TRANSPORT_STAT_LBTRU](https://ultramessaging.github.io/currdoc/doc/API/structlbm__rcv__transport__stats__lbtru__t__stct.html)
+* [TRANSPORT_STAT_TCP](https://ultramessaging.github.io/currdoc/doc/API/structlbm__rcv__transport__stats__tcp__t__stct.html)
+* [TRANSPORT_STAT_LBTIPC](https://ultramessaging.github.io/currdoc/doc/API/structlbm__rcv__transport__stats__lbtipc__t__stct.html)
+* [TRANSPORT_STAT_LBTSMX](https://ultramessaging.github.io/currdoc/doc/API/structlbm__rcv__transport__stats__lbtsmx__t__stct.html)
 
 ## Delay Before Terminate
 
