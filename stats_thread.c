@@ -117,6 +117,7 @@ void print_stats(stats_thread_t *stats_thread)
 
   /* Print context stats. */
   {
+    /******* See https://ultramessaging.github.io/currdoc/doc/API/structlbm__context__stats__t__stct.html */
     unsigned long tr_drops = ctx_stats.tr_dgrams_dropped_ver + ctx_stats.tr_dgrams_dropped_type
                              + ctx_stats.tr_dgrams_dropped_malformed;
     printf("ctx_name='%s', context: tr_dgrams_sent=%lu, tr_dgrams_rcved=%lu, tr_drops=%lu"
@@ -135,6 +136,7 @@ void print_stats(stats_thread_t *stats_thread)
   for (i = 0; i < actual_src_entries; i++) {
     switch (stats_thread->src_stats[i].type) {
       case LBM_TRANSPORT_STAT_LBTRM: {
+        /******* See https://ultramessaging.github.io/currdoc/doc/API/structlbm__src__transport__stats__lbtrm__t__stct.html */
         lbm_src_transport_stats_lbtrm_t *stats = &stats_thread->src_stats[i].transport.lbtrm;
         printf("ctx_name='%s', src/lbtrm: source=%s, msgs_sent=%lu, naks_rcved=%lu"
             ", naks_ignored=%lu, naks_shed=%lu, naks_rx_delay_ignored=%lu, rxs_sent=%lu"
@@ -145,6 +147,7 @@ void print_stats(stats_thread_t *stats_thread)
         break;
       }
       case LBM_TRANSPORT_STAT_LBTRU: {
+        /******* See https://ultramessaging.github.io/currdoc/doc/API/structlbm__src__transport__stats__lbtru__t__stct.html */
         lbm_src_transport_stats_lbtru_t *stats = &stats_thread->src_stats[i].transport.lbtru;
         printf("ctx_name='%s', src/lbtru: source=%s, msgs_sent=%lu, naks_rcved=%lu"
             ", naks_ignored=%lu, naks_shed=%lu, naks_rx_delay_ignored=%lu, rxs_sent=%lu"
@@ -155,6 +158,7 @@ void print_stats(stats_thread_t *stats_thread)
         break;
       }
       case LBM_TRANSPORT_STAT_TCP: {
+        /******* See https://ultramessaging.github.io/currdoc/doc/API/structlbm__src__transport__stats__tcp__t__stct.html */
         lbm_src_transport_stats_tcp_t *stats = &stats_thread->src_stats[i].transport.tcp;
         printf("ctx_name='%s', src/tcp: source=%s, num_clients=%lu"
             "\n",
@@ -163,6 +167,7 @@ void print_stats(stats_thread_t *stats_thread)
         break;
       }
       case LBM_TRANSPORT_STAT_LBTIPC: {
+        /******* See https://ultramessaging.github.io/currdoc/doc/API/structlbm__src__transport__stats__lbtipc__t__stct.html */
         lbm_src_transport_stats_lbtipc_t *stats = &stats_thread->src_stats[i].transport.lbtipc;
         printf("ctx_name='%s', src/lbtipc: source=%s, num_clients=%lu, msgs_sent=%lu"
             "\n",
@@ -171,6 +176,7 @@ void print_stats(stats_thread_t *stats_thread)
         break;
       }
       case LBM_TRANSPORT_STAT_LBTSMX: {
+        /******* See https://ultramessaging.github.io/currdoc/doc/API/structlbm__src__transport__stats__lbtsmx__t__stct.html */
         lbm_src_transport_stats_lbtsmx_t *stats = &stats_thread->src_stats[i].transport.lbtsmx;
         printf("ctx_name='%s', src/lbtsmx: source=%s, num_clients=%lu, msgs_sent=%lu"
             "\n",
@@ -187,6 +193,7 @@ void print_stats(stats_thread_t *stats_thread)
   for (i = 0; i < actual_rcv_entries; i++) {
     switch (stats_thread->rcv_stats[i].type) {
       case LBM_TRANSPORT_STAT_LBTRM: {
+        /******* See https://ultramessaging.github.io/currdoc/doc/API/structlbm__rcv__transport__stats__lbtrm__t__stct.html */
         lbm_rcv_transport_stats_lbtrm_t *stats = &stats_thread->rcv_stats[i].transport.lbtrm;
         unsigned long drops = stats->dgrams_dropped_size + stats->dgrams_dropped_type + stats->dgrams_dropped_version
                               + stats->dgrams_dropped_hdr + stats->dgrams_dropped_other;
@@ -201,6 +208,7 @@ void print_stats(stats_thread_t *stats_thread)
         break;
       }
       case LBM_TRANSPORT_STAT_LBTRU: {
+        /******* See https://ultramessaging.github.io/currdoc/doc/API/structlbm__rcv__transport__stats__lbtru__t__stct.html */
         lbm_rcv_transport_stats_lbtru_t *stats = &stats_thread->rcv_stats[i].transport.lbtru;
         unsigned long drops = stats->dgrams_dropped_size + stats->dgrams_dropped_type + stats->dgrams_dropped_version
                               + stats->dgrams_dropped_hdr + stats->dgrams_dropped_sid + stats->dgrams_dropped_other;
@@ -215,6 +223,7 @@ void print_stats(stats_thread_t *stats_thread)
         break;
       }
       case LBM_TRANSPORT_STAT_TCP: {
+        /******* See https://ultramessaging.github.io/currdoc/doc/API/structlbm__rcv__transport__stats__tcp__t__stct.html */
         lbm_rcv_transport_stats_tcp_t *stats = &stats_thread->rcv_stats[i].transport.tcp;
         printf("ctx_name='%s', rcv/tcp: source=%s, lbm_msgs_rcved=%lu, lbm_msgs_no_topic_rcved=%lu"
             "\n",
@@ -223,6 +232,7 @@ void print_stats(stats_thread_t *stats_thread)
         break;
       }
       case LBM_TRANSPORT_STAT_LBTIPC: {
+        /******* See https://ultramessaging.github.io/currdoc/doc/API/structlbm__rcv__transport__stats__lbtipc__t__stct.html */
         lbm_rcv_transport_stats_lbtipc_t *stats = &stats_thread->rcv_stats[i].transport.lbtipc;
         printf("ctx_name='%s', rcv/lbtipc: source=%s, msgs_rcved=%lu, lbm_msgs_rcved=%lu, lbm_msgs_no_topic_rcved=%lu"
             "\n",
@@ -231,6 +241,7 @@ void print_stats(stats_thread_t *stats_thread)
         break;
       }
       case LBM_TRANSPORT_STAT_LBTSMX: {
+        /******* See https://ultramessaging.github.io/currdoc/doc/API/structlbm__rcv__transport__stats__lbtsmx__t__stct.html */
         lbm_rcv_transport_stats_lbtsmx_t *stats = &stats_thread->rcv_stats[i].transport.lbtsmx;
         printf("ctx_name='%s', rcv/lbtsmx: source=%s, msgs_rcved=%lu, lbm_msgs_rcved=%lu, lbm_msgs_no_topic_rcved=%lu"
             "\n",

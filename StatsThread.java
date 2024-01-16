@@ -151,6 +151,7 @@ class StatsThread implements Runnable {
     }  // while not haveRcvStats
 
     // Print context stats.
+    //****** See https://ultramessaging.github.io/currdoc/doc/API/structlbm__context__stats__t__stct.html
     long trDrops = ctxStats.topicResolutionDatagramsDroppedVersion()
                   + ctxStats.topicResolutionDatagramsDroppedType()
                   + ctxStats.topicResolutionDatagramsDroppedMalformed();
@@ -172,6 +173,7 @@ class StatsThread implements Runnable {
     for (int i = 0; i < srcStats.size(); i++) {
       switch (srcStats.type(i)) {
         case LBM.TRANSPORT_STAT_LBTRM: {
+          //****** See https://ultramessaging.github.io/currdoc/doc/API/structlbm__src__transport__stats__lbtrm__t__stct.html
           System.out.println("ctx_name='" + ctxName + "', src/lbtrm: source=" + srcStats.source(i)
                              + ", msgs_sent=" + srcStats.messagesSent(i)
                              + ", naks_rcved=" + srcStats.naksReceived(i)
@@ -183,6 +185,7 @@ class StatsThread implements Runnable {
           break;
         }
         case LBM.TRANSPORT_STAT_LBTRU: {
+          //****** See https://ultramessaging.github.io/currdoc/doc/API/structlbm__src__transport__stats__lbtru__t__stct.html
           System.out.println("ctx_name='" + ctxName + "', src/lbtru: source=" + srcStats.source(i)
                              + ", msgs_sent=" + srcStats.messagesSent(i)
                              + ", naks_rcved=" + srcStats.naksReceived(i)
@@ -193,6 +196,29 @@ class StatsThread implements Runnable {
           );
           break;
         }
+        case LBM.TRANSPORT_STAT_TCP: {
+          //****** See https://ultramessaging.github.io/currdoc/doc/API/structlbm__src__transport__stats__tcp__t__stct.html
+          System.out.println("ctx_name='" + ctxName + "', src/tcp: source=" + srcStats.source(i)
+                             + ", num_clients=" + srcStats.numberOfClients(i)
+          );
+          break;
+        }
+        case LBM.TRANSPORT_STAT_LBTIPC: {
+          //****** See https://ultramessaging.github.io/currdoc/doc/API/structlbm__src__transport__stats__lbtipc__t__stct.html
+          System.out.println("ctx_name='" + ctxName + "', src/lbtipc: source=" + srcStats.source(i)
+                             + ", num_clients=" + srcStats.numberOfClients(i)
+                             + ", msgs_sent=" + srcStats.messagesSent(i)
+          );
+          break;
+        }
+        case LBM.TRANSPORT_STAT_LBTSMX: {
+          //****** See https://ultramessaging.github.io/currdoc/doc/API/structlbm__src__transport__stats__lbtsmx__t__stct.html
+          System.out.println("ctx_name='" + ctxName + "', src/lbtsmx: source=" + srcStats.source(i)
+                             + ", num_clients=" + srcStats.numberOfClients(i)
+                             + ", msgs_sent=" + srcStats.messagesSent(i)
+          );
+          break;
+        }
       }  // switch
     }  // for i
 
@@ -200,6 +226,7 @@ class StatsThread implements Runnable {
     for (int i = 0; i < rcvStats.size(); i++) {
       switch (rcvStats.type(i)) {
         case LBM.TRANSPORT_STAT_LBTRM: {
+          //****** See https://ultramessaging.github.io/currdoc/doc/API/structlbm__rcv__transport__stats__lbtrm__t__stct.html
           long drops = rcvStats.datagramsDroppedIncorrectSize(i) + rcvStats.datagramsDroppedType(i)
                       + rcvStats.datagramsDroppedVersion(i) + rcvStats.datagramsDroppedHeader(i)
                       + rcvStats.datagramsDroppedOther(i);
@@ -217,6 +244,7 @@ class StatsThread implements Runnable {
           break;
         }
         case LBM.TRANSPORT_STAT_LBTRU: {
+          //****** See https://ultramessaging.github.io/currdoc/doc/API/structlbm__rcv__transport__stats__lbtru__t__stct.html
           long drops = rcvStats.datagramsDroppedIncorrectSize(i) + rcvStats.datagramsDroppedType(i)
                       + rcvStats.datagramsDroppedVersion(i) + rcvStats.datagramsDroppedHeader(i)
                       + rcvStats.datagramsDroppedOther(i) + rcvStats.datagramsDroppedSID(i);
@@ -229,6 +257,32 @@ class StatsThread implements Runnable {
                              + ", lbm_msgs_rcved=" + rcvStats.lbmMessagesReceived(i)
                              + ", lbm_msgs_no_topic_rcved=" + rcvStats.noTopicMessagesReceived(i)
                              + ", drops=" + drops
+          );
+          break;
+        }
+        case LBM.TRANSPORT_STAT_TCP: {
+          //****** See https://ultramessaging.github.io/currdoc/doc/API/structlbm__rcv__transport__stats__tcp__t__stct.html
+          System.out.println("ctx_name='" + ctxName + "', rcv/tcp: source=" + rcvStats.source(i)
+                             + ", lbm_msgs_rcved=" + rcvStats.lbmMessagesReceived(i)
+                             + ", lbm_msgs_no_topic_rcved=" + rcvStats.noTopicMessagesReceived(i)
+          );
+          break;
+        }
+        case LBM.TRANSPORT_STAT_LBTIPC: {
+          //****** See https://ultramessaging.github.io/currdoc/doc/API/structlbm__rcv__transport__stats__lbtipc__t__stct.html
+          System.out.println("ctx_name='" + ctxName + "', rcv/lbtipc: source=" + rcvStats.source(i)
+                             + ", msgs_rcved=" + rcvStats.messagesReceived(i)
+                             + ", lbm_msgs_rcved=" + rcvStats.lbmMessagesReceived(i)
+                             + ", lbm_msgs_no_topic_rcved=" + rcvStats.noTopicMessagesReceived(i)
+          );
+          break;
+        }
+        case LBM.TRANSPORT_STAT_LBTSMX: {
+          //****** See https://ultramessaging.github.io/currdoc/doc/API/structlbm__rcv__transport__stats__lbtsmx__t__stct.html
+          System.out.println("ctx_name='" + ctxName + "', rcv/lbtsmx: source=" + rcvStats.source(i)
+                             + ", msgs_rcved=" + rcvStats.messagesReceived(i)
+                             + ", lbm_msgs_rcved=" + rcvStats.lbmMessagesReceived(i)
+                             + ", lbm_msgs_no_topic_rcved=" + rcvStats.noTopicMessagesReceived(i)
           );
           break;
         }

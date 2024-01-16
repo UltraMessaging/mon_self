@@ -15,6 +15,7 @@ Example of application monitoring its own UM stats.
 &nbsp;&nbsp;&nbsp;&nbsp;&bull; [Architecture](#architecture)  
 &bull; [Coding Notes](#coding-notes)  
 &nbsp;&nbsp;&nbsp;&nbsp;&bull; [C Error Handling](#c-error-handling)  
+&nbsp;&nbsp;&nbsp;&nbsp;&bull; [Java Field Names](#java-field-names)  
 &nbsp;&nbsp;&nbsp;&nbsp;&bull; [Delay Before Terminate](#delay-before-terminate)  
 <!-- TOC created by '/home/sford/bin/mdtoc.pl README.md' (see https://github.com/fordsfords/mdtoc) -->
 <!-- mdtoc-end -->
@@ -143,6 +144,45 @@ A set of three code macros is used to wrap function calls:
 </ul>
 These macros write error information to STDERR and exit the program
 with a non-zero status.
+
+## Java Statistics Fields
+
+Note that when printing the monitoring data,
+the C field names are used.
+This was done to make the field naming common,
+and to make it easier to find the C documentation for the fields
+(the C doc is generally better than the Java/.NET doc).
+
+WARNING!
+The Java getters for transport statistics fields do not perform error checking
+against the transport type.
+For example, you might use the method "srcStats.messagesSent(i)" to get the
+number of datagrams sent.
+However, if the transport type is TCP, that field is not supported,
+and it simply returns 0.
+You should only print fields that are valid for the transport type.
+Unfortunately, the Java API documentation does not list the valid
+fields per transport type.
+You need to use the C documentation for that.
+Here are appropriate links:
+
+Source transport statistics:
+<ul>
+<li>[TRANSPORT_STAT_LBTRM](https://ultramessaging.github.io/currdoc/doc/API/structlbm__src__transport__stats__lbtrm__t__stct.html)
+<li>[TRANSPORT_STAT_LBTRU](https://ultramessaging.github.io/currdoc/doc/API/structlbm__src__transport__stats__lbtru__t__stct.html)
+<li>[TRANSPORT_STAT_TCP](https://ultramessaging.github.io/currdoc/doc/API/structlbm__src__transport__stats__tcp__t__stct.html)
+<li>[TRANSPORT_STAT_LBTIPC](https://ultramessaging.github.io/currdoc/doc/API/structlbm__src__transport__stats__lbtipc__t__stct.html)
+<li>[TRANSPORT_STAT_LBTSMX](https://ultramessaging.github.io/currdoc/doc/API/structlbm__src__transport__stats__lbtsmx__t__stct.html)
+</ul>
+
+Receiver transport statistics:
+<ul>
+<li>[TRANSPORT_STAT_LBTRM](https://ultramessaging.github.io/currdoc/doc/API/structlbm__rcv__transport__stats__lbtrm__t__stct.html)
+<li>[TRANSPORT_STAT_LBTRU](https://ultramessaging.github.io/currdoc/doc/API/structlbm__rcv__transport__stats__lbtru__t__stct.html)
+<li>[TRANSPORT_STAT_TCP](https://ultramessaging.github.io/currdoc/doc/API/structlbm__rcv__transport__stats__tcp__t__stct.html)
+<li>[TRANSPORT_STAT_LBTIPC](https://ultramessaging.github.io/currdoc/doc/API/structlbm__rcv__transport__stats__lbtipc__t__stct.html)
+<li>[TRANSPORT_STAT_LBTSMX](https://ultramessaging.github.io/currdoc/doc/API/structlbm__rcv__transport__stats__lbtsmx__t__stct.html)
+</ul>
 
 ## Delay Before Terminate
 

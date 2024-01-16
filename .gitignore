@@ -10,6 +10,7 @@ tmp.*
 ~*
 .DS_Store
 lbm.sh
+tst.cfg
 *.class
 
 # Prerequisites
