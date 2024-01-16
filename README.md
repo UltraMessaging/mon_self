@@ -15,7 +15,7 @@ Example of application monitoring its own UM stats.
 &nbsp;&nbsp;&nbsp;&nbsp;&bull; [Architecture](#architecture)  
 &bull; [Coding Notes](#coding-notes)  
 &nbsp;&nbsp;&nbsp;&nbsp;&bull; [C Error Handling](#c-error-handling)  
-&nbsp;&nbsp;&nbsp;&nbsp;&bull; [Java Field Names](#java-field-names)  
+&nbsp;&nbsp;&nbsp;&nbsp;&bull; [Java Statistics Fields](#java-statistics-fields)  
 &nbsp;&nbsp;&nbsp;&nbsp;&bull; [Delay Before Terminate](#delay-before-terminate)  
 <!-- TOC created by '/home/sford/bin/mdtoc.pl README.md' (see https://github.com/fordsfords/mdtoc) -->
 <!-- mdtoc-end -->
