@@ -97,6 +97,22 @@ If the volume of data generated per hour is too large,
 Informatica recommends decreasing the frequency of sampling
 rather than decreasing the amount of data per sample.
 
+A few customers have an existing application monitoring infrastructure
+that cannot easily handle multiple per-transport-session records.
+These customers aggregated all receiver transport stats into a single
+receiver record and included that in their monitoring infrastructure.
+However, they wrote the individual transport session records to a
+local disk file to make the detailed information available,
+albeit somewhat less conveniently.
+
+One exception to the "no aggregation" guideline are
+the "drop" counters due to malformed packets.
+It is rarely useful to differentiate between the different
+drop counters.
+If any of them are non-zero,
+it typically means that a security port scanner or a
+misconfigured application is sending unrecognized packets to UM.
+
 ## Architecture
 
 A separate thread is created to sample stats and print them to STDOUT.
@@ -105,6 +121,11 @@ which frequently use a UM timer to trigger sampling and printing of statistics.
 The problem with using a UM timer is that it can interfere with the
 reception of time-critical messages,
 introducing undesired latency outliers and jitter.
+
+The stats thread is separated into its own module
+(stats_thread.c, StatsThread.java).
+Public methods allow creation, starting,
+terminating, and in C, deleting the thread.
 
 # Coding Notes
 

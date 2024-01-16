@@ -14,6 +14,6 @@ echo "mon_self"
 ./mon_self;  if [ $? -ne 0 ]; then exit 1; fi
 echo ""
 
-#echo "MonSelf"
-#java --add-opens java.base/java.nio=ALL-UNNAMED $CP MonSelf;  if [ $? -ne 0 ]; then exit 1; fi
-#echo ""
+echo "MonSelf"
+java --add-opens java.base/java.nio=ALL-UNNAMED $CP MonSelf;  if [ $? -ne 0 ]; then exit 1; fi
+echo ""

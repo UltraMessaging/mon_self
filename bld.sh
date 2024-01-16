@@ -24,10 +24,13 @@ LIBS="-L $LBM/lib -l lbm -l pthread -l m -l rt"
 
 rm -rf *.class mon_self
 
-gcc -Wall -g -I $LBM/include -I $LBM/include/lbm -o mon_self mon_self.c $LIBS
+gcc -Wall -g -I $LBM/include -I $LBM/include/lbm -o mon_self stats_thread.c mon_self.c $LIBS
 if [ $? -ne 0 ]; then exit 1; fi
 
 
 javac $CP MonSelf.java
+if [ $? -ne 0 ]; then exit 1; fi
+
+javac $CP StatsThread.java
 if [ $? -ne 0 ]; then exit 1; fi
 

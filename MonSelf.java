@@ -1,7 +1,7 @@
-/* MonSelf.java - performance measurement tool.
+/* MonSelf.java -  Example demonstration of "StatsThread" class.
  * See https://github.com/UltraMessaging/cfg_dump */
 /*
-  Copyright (c) 2022-2023 Informatica Corporation
+  (c) Copyright 2023-2024 Informatica Corporation
   Permission is granted to licensees to use or alter this software for any
   purpose, including commercial applications, according to the terms laid
   out in the Software License Agreement.
@@ -40,37 +40,48 @@ class MonSelf implements LBMReceiverCallback {
   private void run(String[] args) throws Exception {
     int i;
     LBM lbm = new LBM();
-    int myStatsIntervalSec = 2;
 
     LBM.setConfiguration("tst.cfg");
 
-    LBMContext myCtx = new LBMContext();
+    LBMContext myCtx1 = new LBMContext();
+    LBMContext myCtx2 = new LBMContext();
 
-    StatsThread myStatsThread = new StatsThread(myCtx, myStatsIntervalSec);
-    myStatsThread.start();
-
-    LBMTopic topicObj = myCtx.lookupTopic("MyTopic");
-    LBMReceiver myRcv = myCtx.createReceiver(topicObj, this, null);
-
-    topicObj = myCtx.allocTopic("MyTopic");;
-    LBMSource mySrc = myCtx.createSource(topicObj);
-
+    StatsThread myStatsThread1 = new StatsThread(myCtx1, "ctx1", 2);
+    myStatsThread1.start();
     try { Thread.sleep(1000); } catch (Exception e) {}
+    StatsThread myStatsThread2 = new StatsThread(myCtx2, "ctx2", 2);
+    myStatsThread2.start();
+
+    LBMTopic topicObj = myCtx1.lookupTopic("MyTopic");
+    LBMReceiver myRcv = myCtx1.createReceiver(topicObj, this, null);
+
+    topicObj = myCtx1.allocTopic("MyTopic");
+    LBMSource mySrc1 = myCtx1.createSource(topicObj);
+
+    topicObj = myCtx2.allocTopic("MyTopic");
+    LBMSource mySrc2 = myCtx2.createSource(topicObj);
+
+    try { Thread.sleep(500); } catch (Exception e) {}
 
     ByteBuffer mySrcBuffer = ByteBuffer.allocateDirect(128);
     mySrcBuffer.position(0); mySrcBuffer.put("123456789".getBytes());
     for (i = 0; i < 5; i++) {
-      mySrc.send(mySrcBuffer, 0, 9, LBM.MSG_FLUSH, null);
+      mySrc1.send(mySrcBuffer, 0, 9, LBM.MSG_FLUSH, null);
+      mySrc2.send(mySrcBuffer, 0, 9, LBM.MSG_FLUSH, null);
       try { Thread.sleep(1000); } catch (Exception e) {}
     }
 
     try { Thread.sleep(1000); } catch (Exception e) {}
 
     myRcv.close();
-    mySrc.close();
-    System.out.println("myStatsThread.terminate");
-    myStatsThread.terminate();
-    myCtx.close();
+    mySrc1.close();
+    mySrc2.close();
+    System.out.println("terminate stats thread1");
+    myStatsThread1.terminate();
+    System.out.println("terminate stats thread2");
+    myStatsThread2.terminate();
+    myCtx1.close();
+    myCtx2.close();
   }  // run
 
   public int onReceive(Object cbArg, LBMMessage msg) {
@@ -79,52 +90,3 @@ class MonSelf implements LBMReceiverCallback {
   }  // onReceive
 
 }  // class MonSelf
-
-
-class StatsThread implements Runnable {
-  private int statsIntervalSec;
-  private LBMContext ctx;
-  private Thread thisThread;
-  private boolean running;
-
-  public StatsThread(LBMContext ctx, int statsIntervalSec) {
-    this.statsIntervalSec = statsIntervalSec;
-    this.ctx = ctx;
-    thisThread = null;
-    running = false;
-  }
-
-  public void start() {
-    running = true;
-    thisThread = new Thread(this);
-    thisThread.start();
-  }
-
-  public void terminate() {
-    if (running) {
-      running = false;
-      try {
-        thisThread.join();
-      } catch (Exception e) {}
-    }
-  }  // terminate
-
-  public void run() {
-    int secsSinceLastPrint = statsIntervalSec;  // Print stats immediately on start.
-    while (running) {
-      if (secsSinceLastPrint >= statsIntervalSec) {
-        printStats(ctx);
-        secsSinceLastPrint = 0;
-      }
-      try { Thread.sleep(1000); } catch (Exception e) {}
-      secsSinceLastPrint++;
-    }  // while running
-
-    // Final stats.
-    printStats(ctx);
-  }  // run
-
-  public static void printStats(LBMContext ctx) {
-    System.out.println("printStats");
-  }  // printStats
-} // StatsThread
