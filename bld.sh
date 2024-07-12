@@ -7,8 +7,7 @@ for F in *.md; do :
     # Update doc table of contents (see https://github.com/fordsfords/mdtoc).
     if which mdtoc.pl >/dev/null; then mdtoc.pl -b "" $F;
     elif [ -x ../mdtoc/mdtoc.pl ]; then ../mdtoc/mdtoc.pl -b "" $F;
-    else echo "FYI: mdtoc.pl not found; see https://github.com/fordsfords/mdtoc"; exit 1
-    fi
+    else echo "FYI: mdtoc.pl not found; Skipping doc build"; echo ""; fi
   fi
 done
 
@@ -24,6 +23,8 @@ LIBS="-L $LBM/lib -l lbm -l pthread -l m -l rt"
 
 rm -rf *.class mon_self
 
+echo "Building code"
+
 gcc -Wall -g -I $LBM/include -I $LBM/include/lbm -o mon_self stats_thread.c mon_self.c $LIBS
 if [ $? -ne 0 ]; then exit 1; fi
 
@@ -34,3 +35,4 @@ if [ $? -ne 0 ]; then exit 1; fi
 javac $CP StatsThread.java
 if [ $? -ne 0 ]; then exit 1; fi
 
+echo "Success"
